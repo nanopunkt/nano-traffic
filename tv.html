@@ -93,8 +93,8 @@
 
 
   .card-copy { min-width:0; }
-  .map-wrap { display:none; position:relative; min-height:280px; border:1px solid rgba(255,255,255,.10); border-radius:24px; overflow:hidden; background:#08090b; box-shadow:inset 0 0 0 1px rgba(255,255,255,.02), 0 18px 50px rgba(0,0,0,.22); }
-  .route-map { position:absolute; inset:0; width:100%; height:100%; filter:saturate(.95) contrast(1.05); }
+  .map-wrap { display:none; position:relative; min-height:280px; border:1px solid rgba(255,255,255,.10); border-radius:24px; overflow:hidden; background:#08090b; box-shadow:inset 0 0 0 1px rgba(255,255,255,.02), 0 18px 50px rgba(0,0,0,.22); isolation:isolate; }
+  .route-map { position:absolute; inset:0; width:100%; height:100%; filter:saturate(.95) contrast(1.06); }
   .map-label { position:absolute; left:18px; top:16px; z-index:2; padding:8px 12px; border-radius:999px; background:rgba(8,9,11,.72); color:rgba(245,245,247,.86); font-size:13px; font-weight:850; letter-spacing:.05em; text-transform:uppercase; backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.10); }
   .gm-style-cc, .gmnoprint, .gm-fullscreen-control { opacity:.35 !important; }
 
@@ -286,6 +286,9 @@ function renderCards(data={}) {
 }
 function escapeHtml(str) { return String(str||'').replace(/[&<>'"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
 
+function clearMapOverlays(current) {
+  ['routeShadow','routeLine','startMarker','endMarker'].forEach(k => { if(current[k]) { current[k].setMap(null); current[k]=null; } });
+}
 function drawRouteMap(index, route) {
   const el = document.getElementById('map-'+index);
   if(!el || !window.google?.maps || !route?.start || !route?.end) return;
@@ -295,26 +298,51 @@ function drawRouteMap(index, route) {
       center:{lat:50.9375,lng:6.9603}, zoom:12, styles:DARK_MAP_STYLE,
       disableDefaultUI:true, gestureHandling:'none', backgroundColor:'#08090b'
     });
-    current.renderer = new google.maps.DirectionsRenderer({
-      map: current.map, suppressMarkers:false, preserveViewport:false,
-      polylineOptions:{ strokeColor:'#29d36b', strokeOpacity:.95, strokeWeight:7 }
-    });
     current.traffic = new google.maps.TrafficLayer();
     current.traffic.setMap(current.map);
     current.service = new google.maps.DirectionsService();
     routeMaps[index] = current;
   }
   const signature = route.start+' → '+route.end;
-  if(current.signature === signature) return;
+  if(current.signature === signature && current.routeLine) {
+    setTimeout(()=>google.maps.event.trigger(current.map,'resize'),120);
+    return;
+  }
   current.signature = signature;
+  clearMapOverlays(current);
   current.service.route({
     origin: route.start, destination: route.end, travelMode: google.maps.TravelMode.DRIVING,
     drivingOptions:{ departureTime:new Date(), trafficModel: google.maps.TrafficModel.BEST_GUESS }
   }, (res, status) => {
-    if(status === 'OK') {
-      current.renderer.setDirections(res);
-      setTimeout(()=>google.maps.event.trigger(current.map,'resize'),120);
+    if(status !== 'OK' || !res?.routes?.[0]) {
+      console.warn('Directions route failed:', status);
+      return;
     }
+    const r0 = res.routes[0];
+    const path = r0.overview_path || [];
+    const bounds = new google.maps.LatLngBounds();
+    path.forEach(p => bounds.extend(p));
+
+    // Dicke dunkle Kontur + Nano-Grün darüber, damit die Route auf der Darkmap sicher sichtbar ist.
+    current.routeShadow = new google.maps.Polyline({
+      path, map:current.map, strokeColor:'#050607', strokeOpacity:.95, strokeWeight:16, zIndex:98
+    });
+    current.routeLine = new google.maps.Polyline({
+      path, map:current.map, strokeColor:'#29d36b', strokeOpacity:1, strokeWeight:9, zIndex:99
+    });
+
+    const leg = r0.legs?.[0];
+    if(leg?.start_location) current.startMarker = new google.maps.Marker({
+      position:leg.start_location, map:current.map, title:'Start',
+      icon:{ path:google.maps.SymbolPath.CIRCLE, scale:8, fillColor:'#0b0b0c', fillOpacity:1, strokeColor:'#f5f5f7', strokeWeight:4 }
+    });
+    if(leg?.end_location) current.endMarker = new google.maps.Marker({
+      position:leg.end_location, map:current.map, title:'Ziel',
+      icon:{ path:google.maps.SymbolPath.CIRCLE, scale:8, fillColor:'#29d36b', fillOpacity:1, strokeColor:'#f5f5f7', strokeWeight:3 }
+    });
+
+    current.map.fitBounds(bounds, {top:70,right:70,bottom:70,left:70});
+    setTimeout(()=>google.maps.event.trigger(current.map,'resize'),120);
   });
 }
 function drawVisibleMaps() {
