@@ -38,7 +38,7 @@ const DEFAULT=[PRESETS[0]];let mapsReady=false,mapsLoading=false,currentRoutes=[
 const styles=[{elementType:"geometry",stylers:[{color:"#0c0d10"}]},{elementType:"labels.text.stroke",stylers:[{color:"#0c0d10"}]},{elementType:"labels.text.fill",stylers:[{color:"#7f8594"}]},{featureType:"road",elementType:"geometry",stylers:[{color:"#20242b"}]},{featureType:"road",elementType:"labels.icon",stylers:[{visibility:"off"}]},{featureType:"road.highway",elementType:"geometry",stylers:[{color:"#2a3038"}]},{featureType:"water",elementType:"geometry",stylers:[{color:"#08090b"}]},{featureType:"poi",stylers:[{visibility:"off"}]},{featureType:"transit",stylers:[{visibility:"off"}]},{featureType:"administrative",elementType:"geometry",stylers:[{color:"#1f232a"}]}];
 function loadRoutes(){try{return JSON.parse(localStorage.getItem("routes_v3")||localStorage.getItem("routes_v2"))||DEFAULT}catch{return DEFAULT}}
 function saveRoutesData(r){localStorage.setItem("routes_v3",JSON.stringify(r.slice(0,4)));localStorage.setItem("nanoTrafficBackup",JSON.stringify({routes:r.slice(0,4),key:loadKey(),ts:Date.now()}))}
-const GOOGLE_API_KEY = "AIzaSyBelusL1VCrXhQD3pyXbH8iFdm8RSTBOEg";
+const GOOGLE_API_KEY = "AIzaSyCozVhI4ebA1mJBQrsBzpFCyt835GDyDeo";
 
 function loadKey(){
   return localStorage.getItem("google_maps_api_key")
