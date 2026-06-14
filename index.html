@@ -240,8 +240,9 @@ function loadRoutes(){try{return JSON.parse(localStorage.getItem("routes_v3")||l
 function saveRoutesData(r){localStorage.setItem("routes_v3",JSON.stringify(r.slice(0,4)));localStorage.setItem("nanoTrafficBackup",JSON.stringify({routes:r.slice(0,4),key:loadKey(),ts:Date.now()}))}
 function loadKey(){
   return localStorage.getItem("google_maps_api_key")
-      || localStorage.getItem("nano_google_key")
-      || "AIzaSyBelusL1VCrXhQD3pyXbH8iFdm8RSTBOEg";
+    || localStorage.getItem("nano_google_key")
+    || "AIzaSyBelusL1VCrXhQD3pyXbH8iFdm8RSTBOEg";
+}
 function saveKey(k){localStorage.setItem("google_maps_api_key",k);localStorage.setItem("nano_google_key",k)}
 function esc(s){return String(s??"").replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
 function clean(a){return String(a||"").replace(/, Deutschland$/i,"")}
