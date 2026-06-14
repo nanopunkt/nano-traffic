@@ -241,7 +241,7 @@ function saveRoutesData(r){localStorage.setItem("routes_v3",JSON.stringify(r.sli
 function loadKey(){
   return localStorage.getItem("google_maps_api_key")
     || localStorage.getItem("nano_google_key")
-    || "AIzaSyCozVhI4ebA1mJBQrsBzpFCyt835GDyDeo";
+    || "";
 }
 function saveKey(k){localStorage.setItem("google_maps_api_key",k);localStorage.setItem("nano_google_key",k)}
 function esc(s){return String(s??"").replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
