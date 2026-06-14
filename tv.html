@@ -23,7 +23,7 @@
   .grid.routes-3, .grid.routes-4 { grid-template-columns:repeat(2,1fr); max-width:1760px; }
   .card { background:linear-gradient(180deg,var(--card2),var(--card)); border:1px solid var(--line); border-radius:30px; min-height:0; box-shadow:0 20px 60px rgba(0,0,0,.26); overflow:hidden; display:flex; flex-direction:column; }
   .card-inner { padding:34px 30px 22px; flex:1; }
-  .route-name { font-size:25px; font-weight:850; letter-spacing:-.4px; margin:0 0 26px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:var(--text); }
+  .route-name { font-size:25px; font-weight:850; letter-spacing:-.4px; margin:0 0 26px; white-space:normal; overflow:visible; text-overflow:clip; line-height:1.04; color:var(--text); }
   .rule { height:1px; background:var(--line); margin-bottom:34px; }
   .places { display:grid; grid-template-columns:28px 1fr; column-gap:15px; row-gap:14px; align-items:start; min-height:168px; }
   .circle { width:22px; height:22px; border:3px solid var(--text); border-radius:50%; }
@@ -133,7 +133,7 @@
     .grid.routes-1 .map-wrap { display:block; min-height:100%; }
     .grid.routes-1 .card-copy { display:flex; flex-direction:column; min-height:0; }
     .grid.routes-1 .status { margin-bottom:0; }
-    .grid.routes-1 .route-name { font-size:clamp(46px,4.5vw,68px); margin:0 0 clamp(24px,3.4vh,38px); letter-spacing:-1.7px; }
+    .grid.routes-1 .route-name { font-size:clamp(40px,3.8vw,58px); margin:0 0 clamp(20px,2.8vh,32px); letter-spacing:-1.4px; white-space:normal; overflow:visible; text-overflow:clip; line-height:1.02; }
     .grid.routes-1 .rule { margin-bottom:clamp(28px,4vh,46px); }
     .grid.routes-1 .places { grid-template-columns:42px 1fr; row-gap:clamp(14px,2vh,22px); min-height:clamp(145px,20vh,210px); }
     .grid.routes-1 .addr { font-size:clamp(24px,2.3vw,36px); line-height:1.15; max-width:1150px; }
@@ -152,10 +152,13 @@
     .grid.routes-1 .open { display:none; }
 
     .grid.routes-2 .card-inner { padding:clamp(34px,4.2vh,54px) clamp(36px,3.6vw,64px) clamp(30px,3.6vh,48px); }
-    .grid.routes-2 .route-name { font-size:clamp(38px,3.4vw,56px); }
+    .grid.routes-2 .route-name { font-size:clamp(32px,2.8vw,46px); white-space:normal; overflow:visible; text-overflow:clip; line-height:1.03; }
     .grid.routes-2 .time .num { font-size:clamp(105px,10vw,180px); }
     .grid.routes-2 .time .unit { font-size:clamp(44px,4.8vw,82px); }
     .grid.routes-2 .status { width:max-content; max-width:100%; }
+    .grid.routes-2 .map-wrap { display:block; min-height:clamp(180px,24vh,260px); margin-top:22px; }
+    .grid.routes-2 .card-inner { display:flex; flex-direction:column; }
+    .grid.routes-2 .card-copy { min-height:0; }
     @media (max-width: 1300px) { .grid.routes-1 .card-inner { grid-template-columns:1fr; } .grid.routes-1 .map-wrap { min-height:300px; } }
 
     .panel.open { position:fixed; inset:40px; z-index:30; overflow:auto; }
@@ -288,6 +291,7 @@ function escapeHtml(str) { return String(str||'').replace(/[&<>'"]/g, c=>({'&':'
 
 function clearMapOverlays(current) {
   ['routeShadow','routeLine','startMarker','endMarker'].forEach(k => { if(current[k]) { current[k].setMap(null); current[k]=null; } });
+  if(current.renderer) { current.renderer.setMap(null); current.renderer=null; }
 }
 function drawRouteMap(index, route) {
   const el = document.getElementById('map-'+index);
@@ -316,22 +320,40 @@ function drawRouteMap(index, route) {
   }, (res, status) => {
     if(status !== 'OK' || !res?.routes?.[0]) {
       console.warn('Directions route failed:', status);
+      const label = el.parentElement?.querySelector('.map-label');
+      if(label) label.textContent = 'Route nicht sichtbar · Directions API prüfen';
       return;
     }
     const r0 = res.routes[0];
-    const path = r0.overview_path || [];
+    const leg = r0.legs?.[0];
+
+    // Erst den offiziellen Google-Routenrenderer setzen, damit die Route sicher gezeichnet wird.
+    current.renderer = new google.maps.DirectionsRenderer({
+      map: current.map,
+      directions: res,
+      routeIndex: 0,
+      suppressMarkers: true,
+      preserveViewport: true,
+      polylineOptions: {
+        strokeColor:'#29d36b', strokeOpacity:1, strokeWeight:10, zIndex:999
+      }
+    });
+
+    // Zusätzlich zeichnen wir eine extra dicke Kontur + Nano-Grün aus allen Step-Pfaden.
+    // Das macht die Route auf dunkler Karte und über dem Traffic-Layer deutlich sichtbar.
+    const path = [];
+    (leg?.steps || []).forEach(step => (step.path || []).forEach(p => path.push(p)));
+    if(!path.length && r0.overview_path) r0.overview_path.forEach(p => path.push(p));
     const bounds = new google.maps.LatLngBounds();
     path.forEach(p => bounds.extend(p));
-
-    // Dicke dunkle Kontur + Nano-Grün darüber, damit die Route auf der Darkmap sicher sichtbar ist.
     current.routeShadow = new google.maps.Polyline({
-      path, map:current.map, strokeColor:'#050607', strokeOpacity:.95, strokeWeight:16, zIndex:98
+      path, map:current.map, strokeColor:'#020304', strokeOpacity:1, strokeWeight:22, zIndex:1000
     });
     current.routeLine = new google.maps.Polyline({
-      path, map:current.map, strokeColor:'#29d36b', strokeOpacity:1, strokeWeight:9, zIndex:99
+      path, map:current.map, strokeColor:'#29d36b', strokeOpacity:1, strokeWeight:13, zIndex:1001
     });
 
-    const leg = r0.legs?.[0];
+
     if(leg?.start_location) current.startMarker = new google.maps.Marker({
       position:leg.start_location, map:current.map, title:'Start',
       icon:{ path:google.maps.SymbolPath.CIRCLE, scale:8, fillColor:'#0b0b0c', fillOpacity:1, strokeColor:'#f5f5f7', strokeWeight:4 }
