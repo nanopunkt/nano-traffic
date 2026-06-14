@@ -92,6 +92,14 @@
   .clear-route { border:0; background:#252529; color:#fff; border-radius:12px; padding:0 11px; height:42px; align-self:end; cursor:pointer; font-size:18px; }
 
 
+  .card-copy { min-width:0; }
+  .map-wrap { display:none; position:relative; min-height:280px; border:1px solid rgba(255,255,255,.10); border-radius:24px; overflow:hidden; background:#08090b; box-shadow:inset 0 0 0 1px rgba(255,255,255,.02), 0 18px 50px rgba(0,0,0,.22); }
+  .route-map { position:absolute; inset:0; width:100%; height:100%; filter:saturate(.95) contrast(1.05); }
+  .map-label { position:absolute; left:18px; top:16px; z-index:2; padding:8px 12px; border-radius:999px; background:rgba(8,9,11,.72); color:rgba(245,245,247,.86); font-size:13px; font-weight:850; letter-spacing:.05em; text-transform:uppercase; backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.10); }
+  .gm-style-cc, .gmnoprint, .gm-fullscreen-control { opacity:.35 !important; }
+
+
+
 
   /* TV-safe layout: more breathing room, no clipping in Safari fullscreen on 1920x1080 */
   @media (min-width: 900px) {
@@ -118,17 +126,23 @@
     }
 
     .grid.routes-1 { max-width:none; }
-    .grid.routes-1 .card-inner { padding:clamp(54px,7vh,78px) clamp(70px,6vw,110px) clamp(48px,6vh,76px); }
-    .grid.routes-1 .route-name { font-size:clamp(52px,5.2vw,76px); margin:0 0 clamp(28px,4vh,44px); letter-spacing:-1.7px; }
+    .grid.routes-1 .card-inner { 
+      padding:clamp(46px,5.8vh,66px) clamp(54px,4.8vw,86px) clamp(42px,5vh,62px); 
+      display:grid; grid-template-columns:minmax(620px,.86fr) minmax(520px,1.14fr); gap:clamp(34px,4vw,64px); align-items:stretch; 
+    }
+    .grid.routes-1 .map-wrap { display:block; min-height:100%; }
+    .grid.routes-1 .card-copy { display:flex; flex-direction:column; min-height:0; }
+    .grid.routes-1 .status { margin-bottom:0; }
+    .grid.routes-1 .route-name { font-size:clamp(46px,4.5vw,68px); margin:0 0 clamp(24px,3.4vh,38px); letter-spacing:-1.7px; }
     .grid.routes-1 .rule { margin-bottom:clamp(28px,4vh,46px); }
     .grid.routes-1 .places { grid-template-columns:42px 1fr; row-gap:clamp(14px,2vh,22px); min-height:clamp(145px,20vh,210px); }
-    .grid.routes-1 .addr { font-size:clamp(28px,2.8vw,42px); line-height:1.15; max-width:1150px; }
+    .grid.routes-1 .addr { font-size:clamp(24px,2.3vw,36px); line-height:1.15; max-width:1150px; }
     .grid.routes-1 .dots { height:clamp(46px,6vh,70px); margin-left:15px; }
     .grid.routes-1 .circle { width:30px; height:30px; }
     .grid.routes-1 .pin { font-size:40px; }
     .grid.routes-1 .time { margin-top:clamp(18px,3vh,34px); }
-    .grid.routes-1 .time .num { font-size:clamp(150px,15vw,250px); }
-    .grid.routes-1 .time .unit { font-size:clamp(62px,6.2vw,110px); }
+    .grid.routes-1 .time .num { font-size:clamp(132px,12.5vw,210px); }
+    .grid.routes-1 .time .unit { font-size:clamp(56px,5.4vw,92px); }
     .grid.routes-1 .normal { font-size:clamp(28px,2.3vw,38px); margin-top:clamp(12px,2vh,22px); }
     .grid.routes-1 .status { 
       width:max-content; min-width:0; max-width:520px; 
@@ -142,6 +156,7 @@
     .grid.routes-2 .time .num { font-size:clamp(105px,10vw,180px); }
     .grid.routes-2 .time .unit { font-size:clamp(44px,4.8vw,82px); }
     .grid.routes-2 .status { width:max-content; max-width:100%; }
+    @media (max-width: 1300px) { .grid.routes-1 .card-inner { grid-template-columns:1fr; } .grid.routes-1 .map-wrap { min-height:300px; } }
 
     .panel.open { position:fixed; inset:40px; z-index:30; overflow:auto; }
   }
@@ -202,6 +217,14 @@ const DEFAULTS = { apiKey:'', routes:[
 ]};
 let state = loadState();
 let mapsLoading = false;
+const routeMaps = {};
+const DARK_MAP_STYLE = [
+  {elementType:"geometry",stylers:[{color:"#111217"}]},{elementType:"labels.text.stroke",stylers:[{color:"#111217"}]},{elementType:"labels.text.fill",stylers:[{color:"#8b8b92"}]},
+  {featureType:"administrative",elementType:"geometry",stylers:[{visibility:"off"}]},{featureType:"poi",stylers:[{visibility:"off"}]},{featureType:"transit",stylers:[{visibility:"off"}]},
+  {featureType:"road",elementType:"geometry",stylers:[{color:"#252832"}]},{featureType:"road",elementType:"geometry.stroke",stylers:[{color:"#0b0c10"}]},{featureType:"road",elementType:"labels.text.fill",stylers:[{color:"#c5c7ce"}]},
+  {featureType:"road.highway",elementType:"geometry",stylers:[{color:"#303443"}]},{featureType:"road.highway",elementType:"geometry.stroke",stylers:[{color:"#14161c"}]},
+  {featureType:"water",elementType:"geometry",stylers:[{color:"#07080b"}]},{featureType:"landscape",elementType:"geometry",stylers:[{color:"#0f1015"}]}
+];
 function cloneDefaults(){ return JSON.parse(JSON.stringify(DEFAULTS)); }
 function normalizeState(raw) {
   const base = cloneDefaults();
@@ -249,16 +272,54 @@ function renderCards(data={}) {
     grid.insertAdjacentHTML('beforeend', `
       <article class="card ${has?'':'empty'}">
         <div class="card-inner">
-          <h3 class="route-name">${escapeHtml(r.name||'Weg '+(i+1))}</h3><div class="rule"></div>
-          <div class="places"><div class="circle"></div><div class="addr">${escapeHtml(cleanAddress(r.start))}</div><div class="dots"></div><div></div><div class="pin">⌖</div><div class="addr">${escapeHtml(cleanAddress(r.end))}</div></div>
-          <div class="time ${cls}"><span class="num">${time}</span><span class="unit">min</span></div>${err}
-          <div class="status ${cls}"><span class="dot"></span><span>${has?txt:'Warte auf Daten'}</span></div>
+          <div class="card-copy">
+            <h3 class="route-name">${escapeHtml(r.name||'Weg '+(i+1))}</h3><div class="rule"></div>
+            <div class="places"><div class="circle"></div><div class="addr">${escapeHtml(cleanAddress(r.start))}</div><div class="dots"></div><div></div><div class="pin">⌖</div><div class="addr">${escapeHtml(cleanAddress(r.end))}</div></div>
+            <div class="time ${cls}"><span class="num">${time}</span><span class="unit">min</span></div>${err}
+            <div class="status ${cls}"><span class="dot"></span><span>${has?txt:'Warte auf Daten'}</span></div>
+          </div>
+          <div class="map-wrap"><div class="map-label">Live Route + Verkehr</div><div class="route-map" id="map-${i}"></div></div>
         </div>
         <a class="open" href="${mapsUrl(r)}" target="_blank"><span>⌖ Route öffnen</span><span class="arrow">→</span></a>
       </article>`);
   });
 }
 function escapeHtml(str) { return String(str||'').replace(/[&<>'"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
+
+function drawRouteMap(index, route) {
+  const el = document.getElementById('map-'+index);
+  if(!el || !window.google?.maps || !route?.start || !route?.end) return;
+  const current = routeMaps[index] || {};
+  if(!current.map) {
+    current.map = new google.maps.Map(el, {
+      center:{lat:50.9375,lng:6.9603}, zoom:12, styles:DARK_MAP_STYLE,
+      disableDefaultUI:true, gestureHandling:'none', backgroundColor:'#08090b'
+    });
+    current.renderer = new google.maps.DirectionsRenderer({
+      map: current.map, suppressMarkers:false, preserveViewport:false,
+      polylineOptions:{ strokeColor:'#29d36b', strokeOpacity:.95, strokeWeight:7 }
+    });
+    current.traffic = new google.maps.TrafficLayer();
+    current.traffic.setMap(current.map);
+    current.service = new google.maps.DirectionsService();
+    routeMaps[index] = current;
+  }
+  const signature = route.start+' → '+route.end;
+  if(current.signature === signature) return;
+  current.signature = signature;
+  current.service.route({
+    origin: route.start, destination: route.end, travelMode: google.maps.TravelMode.DRIVING,
+    drivingOptions:{ departureTime:new Date(), trafficModel: google.maps.TrafficModel.BEST_GUESS }
+  }, (res, status) => {
+    if(status === 'OK') {
+      current.renderer.setDirections(res);
+      setTimeout(()=>google.maps.event.trigger(current.map,'resize'),120);
+    }
+  });
+}
+function drawVisibleMaps() {
+  state.routes.slice(0,4).forEach((r,i)=>drawRouteMap(i,r));
+}
 function renderEditors() {
   document.getElementById('apiKey').value=state.apiKey||'';
   const box=document.getElementById('routeEditors'); box.innerHTML='';
@@ -323,6 +384,7 @@ async function updateTimes() {
     });
   })));
   renderCards(results);
+  requestAnimationFrame(drawVisibleMaps);
   document.getElementById('footer').textContent='↻ Aktualisiert: '+new Date().toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
 }
 document.getElementById('settingsBtn').onclick=()=>{renderEditors(); document.getElementById('settings').showModal();};
