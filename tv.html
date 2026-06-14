@@ -2,51 +2,309 @@
 <html lang="de">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>nano. traffic TV</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>nano. traffic</title>
+<meta name="theme-color" content="#0b0b0c" />
 <style>
 :root{--bg:#050506;--card:#171719;--card2:#111114;--line:#2a2a2e;--text:#f5f5f7;--muted:#96969d;--green:#29d36b;--red:#ff4d4f;--yellow:#ffcc00}
-*{box-sizing:border-box} html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#050506;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Arial,sans-serif} body{background:radial-gradient(circle at 50% 0%,#18181d 0%,#070708 48%,#030304 100%)}
-.app{height:100vh;width:100vw;padding:28px 52px 36px;display:flex;flex-direction:column;gap:22px}.top{height:74px;display:flex;align-items:center;justify-content:space-between;flex:0 0 auto}.brand{display:flex;align-items:baseline;gap:18px;white-space:nowrap}.nano{font-weight:950;letter-spacing:-.065em;font-size:58px;line-height:.9}.traffic{font-size:40px;font-weight:400;letter-spacing:-.06em}.gear{border:0;background:#202025;color:#fff;width:52px;height:52px;border-radius:16px;font-size:28px;cursor:pointer}.grid{flex:1;display:grid;gap:26px;min-height:0}.grid.count1{grid-template-columns:1fr}.grid.count2{grid-template-columns:repeat(2,1fr)}.grid.count3,.grid.count4{grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(2,minmax(0,1fr))}.card{min-height:0;background:linear-gradient(180deg,#1d1d21 0%,#141416 100%);border:1px solid var(--line);border-radius:30px;box-shadow:0 28px 70px rgba(0,0,0,.42);overflow:hidden;display:grid;grid-template-rows:auto 1fr}.cardInner{padding:26px 34px 18px;min-width:0}.routeName{font-weight:950;letter-spacing:-.055em;line-height:1.02;font-size:clamp(32px,3.05vw,58px);white-space:normal;overflow:visible}.rule{height:1px;background:var(--line);margin:18px 0 16px}.places{display:grid;grid-template-columns:26px 1fr;column-gap:14px;row-gap:9px;align-items:center;color:#f1f1f3}.ico{font-size:24px;line-height:1;text-align:center;color:#fff}.dots{grid-column:1;color:#84848c;font-size:29px;line-height:.65;letter-spacing:2px;writing-mode:vertical-rl;height:40px;justify-self:center}.addr{font-size:clamp(18px,1.45vw,28px);font-weight:700;line-height:1.2;white-space:normal;overflow-wrap:anywhere}.timeRow{display:flex;align-items:flex-end;gap:14px;margin-top:18px}.num{font-size:clamp(82px,8.4vw,170px);font-weight:950;letter-spacing:-.08em;line-height:.82}.unit{font-size:clamp(30px,3.1vw,64px);font-weight:950;letter-spacing:-.065em;line-height:.95;margin-bottom:.12em}.good .num,.good .unit,.good .badge{color:var(--green)}.bad .num,.bad .unit,.bad .badge{color:var(--red)}.medium .num,.medium .unit,.medium .badge{color:var(--yellow)}.loading .num,.loading .unit,.loading .badge{color:var(--muted)}.normal{font-size:clamp(16px,1.35vw,26px);font-weight:750;color:var(--muted);margin-top:10px}.badge{margin-top:14px;border-radius:16px;border:1px solid currentColor;background:rgba(41,211,107,.14);display:inline-flex;align-items:center;gap:10px;padding:12px 18px;font-size:clamp(15px,1.15vw,22px);font-weight:900}.badge:before{content:"";width:12px;height:12px;border-radius:99px;background:currentColor}.mapBox{position:relative;min-height:0;margin:0 34px 28px;border-radius:22px;overflow:hidden;border:1px solid #25252b;background:#0b0b0d}.map{height:100%;min-height:120px}.mapLabel{position:absolute;left:16px;top:14px;z-index:5;padding:8px 12px;border-radius:999px;background:rgba(5,5,6,.78);backdrop-filter:blur(8px);font-size:12px;letter-spacing:.08em;font-weight:950;color:#fff}.count1 .card{grid-template-columns:minmax(520px,.95fr) 1.25fr;grid-template-rows:1fr}.count1 .cardInner{padding:72px 54px 44px}.count1 .routeName{font-size:clamp(58px,5.2vw,92px)}.count1 .rule{margin:28px 0 26px}.count1 .addr{font-size:clamp(28px,2vw,40px)}.count1 .dots{height:72px;font-size:42px}.count1 .timeRow{margin-top:42px}.count1 .num{font-size:clamp(170px,15vw,270px)}.count1 .unit{font-size:clamp(64px,5.2vw,98px)}.count1 .normal{font-size:34px}.count1 .badge{font-size:30px;padding:15px 26px}.count1 .mapBox{margin:34px 42px 34px 0;height:auto}.count2 .card{grid-template-rows:auto 165px}.count3 .card,.count4 .card{grid-template-rows:auto 118px}.count3 .cardInner,.count4 .cardInner{padding:20px 30px 12px}.count3 .routeName,.count4 .routeName{font-size:clamp(28px,2.15vw,44px)}.count3 .rule,.count4 .rule{margin:12px 0 10px}.count3 .addr,.count4 .addr{font-size:clamp(15px,1.02vw,22px)}.count3 .dots,.count4 .dots{height:28px;font-size:22px}.count3 .timeRow,.count4 .timeRow{margin-top:10px}.count3 .num,.count4 .num{font-size:clamp(68px,5.3vw,118px)}.count3 .unit,.count4 .unit{font-size:clamp(26px,2.1vw,44px)}.count3 .normal,.count4 .normal{font-size:18px;margin-top:4px}.count3 .badge,.count4 .badge{font-size:17px;padding:8px 14px;margin-top:8px;border-radius:13px}.count3 .mapBox,.count4 .mapBox{margin:0 30px 20px}.foot{height:34px;display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:22px;font-weight:650;flex:0 0 auto}.clock{font-size:28px;color:#fff;font-weight:900}.panel{position:fixed;right:34px;top:112px;width:min(640px,calc(100vw - 68px));max-height:calc(100vh - 150px);overflow:auto;background:#111114;border:1px solid var(--line);border-radius:24px;box-shadow:0 30px 80px rgba(0,0,0,.6);padding:20px;display:none;z-index:100}.panel.open{display:block}.panel h2{margin:0 0 14px;font-size:22px}.presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}.preset{border:1px solid #34343a;background:#1c1c20;color:#fff;border-radius:999px;padding:9px 12px;font-weight:800;font-size:13px}.row{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;margin-bottom:8px}.row input,.key{background:#070708;border:1px solid #303036;color:#fff;border-radius:12px;padding:11px;font-size:13px}.keyrow{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:14px}.btn{border:0;border-radius:12px;background:#fff;color:#000;font-weight:900;padding:11px 14px;cursor:pointer}.del{background:#2a2a2e;color:#fff;border:0;border-radius:12px;padding:0 12px;font-size:18px}.hint{font-size:13px;line-height:1.35;color:var(--muted);margin-top:10px}.gm-style{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Arial,sans-serif!important}.gm-style-cc,.gmnoprint a,.gmnoprint span{opacity:.35!important}
+*{box-sizing:border-box}
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#050506;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Arial,sans-serif}
+body{background:radial-gradient(circle at 50% 0%,#18181d 0%,#070708 48%,#030304 100%)}
+.app{height:100vh;width:100vw;padding:30px 54px 34px;display:flex;flex-direction:column;gap:18px}
+.top{height:64px;display:flex;align-items:center;justify-content:space-between;flex:0 0 auto}.brand{display:flex;align-items:baseline;gap:18px;white-space:nowrap}.nano{font-weight:950;letter-spacing:-.065em;font-size:52px;line-height:.9}.traffic{font-size:36px;font-weight:400;letter-spacing:-.06em}.gear{border:0;background:#202025;color:#fff;width:48px;height:48px;border-radius:16px;font-size:26px;cursor:pointer}
+.grid{flex:1;display:grid;gap:26px;min-height:0}.grid.count1{grid-template-columns:1fr}.grid.count2{grid-template-columns:repeat(2,1fr)}.grid.count3,.grid.count4{grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(2,minmax(0,1fr))}
+.card{position:relative;min-height:0;background:linear-gradient(180deg,#1d1d21 0%,#141416 100%);border:1px solid var(--line);border-radius:30px;box-shadow:0 28px 70px rgba(0,0,0,.42);overflow:hidden}.card.hasMap{background:#090a0c}.card.hasMap:after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(5,5,6,.82) 0%,rgba(5,5,6,.68) 38%,rgba(5,5,6,.28) 72%,rgba(5,5,6,.16) 100%),linear-gradient(180deg,rgba(5,5,6,.18) 0%,rgba(5,5,6,.52) 100%);pointer-events:none}.cardInner{position:relative;z-index:2;padding:26px 34px 22px;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-start}.routeName{font-weight:950;letter-spacing:-.055em;line-height:1.02;font-size:clamp(30px,2.75vw,54px);white-space:normal;overflow:visible}.rule{height:1px;background:var(--line);margin:16px 0 14px}.hasMap .rule{background:rgba(255,255,255,.14)}
+.places{display:grid;grid-template-columns:26px 1fr;column-gap:14px;row-gap:7px;align-items:center;color:#f1f1f3}.ico{font-size:24px;line-height:1;text-align:center;color:#fff}.dots{grid-column:1;color:#84848c;font-size:27px;line-height:.65;letter-spacing:2px;writing-mode:vertical-rl;height:34px;justify-self:center}.addr{font-size:clamp(16px,1.16vw,24px);font-weight:750;line-height:1.18;white-space:normal;overflow-wrap:anywhere}.timeRow{display:flex;align-items:flex-end;gap:12px;margin-top:16px}.num{font-size:clamp(70px,6.7vw,140px);font-weight:950;letter-spacing:-.08em;line-height:.82}.unit{font-size:clamp(28px,2.5vw,54px);font-weight:950;letter-spacing:-.065em;line-height:.95;margin-bottom:.12em}.good .num,.good .unit,.good .badge{color:var(--green)}.bad .num,.bad .unit,.bad .badge{color:var(--red)}.medium .num,.medium .unit,.medium .badge{color:var(--yellow)}.loading .num,.loading .unit,.loading .badge{color:var(--muted)}.normal{font-size:clamp(15px,1.12vw,22px);font-weight:750;color:var(--muted);margin-top:8px}.badge{margin-top:12px;border-radius:15px;border:1px solid currentColor;background:rgba(41,211,107,.14);display:inline-flex;align-items:center;gap:10px;padding:10px 16px;font-size:clamp(14px,1vw,20px);font-weight:900;align-self:flex-start}.badge:before{content:"";width:11px;height:11px;border-radius:99px;background:currentColor}.medium .badge{background:rgba(255,204,0,.13)}.bad .badge{background:rgba(255,77,79,.13)}
+.mapBox{position:absolute;inset:0;z-index:0;margin:0;border:0;border-radius:0;overflow:hidden;background:#0b0b0d;opacity:.86}.map{width:100%;height:100%;min-height:100%}.mapLabel{position:absolute;right:34px;bottom:26px;z-index:5;padding:8px 12px;border-radius:999px;background:rgba(5,5,6,.64);backdrop-filter:blur(8px);font-size:12px;letter-spacing:.08em;font-weight:950;color:#fff}
+.card:not(.hasMap) .mapBox{display:none}
+.count1 .cardInner{width:min(720px,50%);padding:64px 58px 48px}.count1 .routeName{font-size:clamp(56px,5.1vw,92px)}.count1 .rule{margin:26px 0 24px}.count1 .addr{font-size:clamp(24px,1.85vw,38px)}.count1 .dots{height:62px;font-size:38px}.count1 .timeRow{margin-top:36px}.count1 .num{font-size:clamp(150px,13.2vw,245px)}.count1 .unit{font-size:clamp(58px,4.8vw,92px)}.count1 .normal{font-size:30px;margin-top:12px}.count1 .badge{font-size:27px;padding:14px 24px;margin-top:18px}.count1 .mapLabel{right:42px;bottom:34px}
+.count2 .cardInner{padding:26px 34px 24px}.count2 .hasMap .cardInner{width:58%}.count3 .cardInner,.count4 .cardInner{padding:20px 30px 18px}.count3 .hasMap .cardInner,.count4 .hasMap .cardInner{width:62%}.count3 .routeName,.count4 .routeName{font-size:clamp(26px,2vw,42px)}.count3 .rule,.count4 .rule{margin:10px 0 9px}.count3 .addr,.count4 .addr{font-size:clamp(14px,.95vw,20px)}.count3 .dots,.count4 .dots{height:24px;font-size:20px}.count3 .timeRow,.count4 .timeRow{margin-top:8px}.count3 .num,.count4 .num{font-size:clamp(58px,4.7vw,104px)}.count3 .unit,.count4 .unit{font-size:clamp(23px,1.85vw,40px)}.count3 .normal,.count4 .normal{font-size:16px;margin-top:4px}.count3 .badge,.count4 .badge{font-size:15px;padding:7px 12px;margin-top:7px;border-radius:12px}
+.foot{height:30px;display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:20px;font-weight:650;flex:0 0 auto}.clock{font-size:28px;color:#fff;font-weight:900}
+.panel{position:fixed;right:34px;top:104px;width:min(640px,calc(100vw - 68px));max-height:calc(100vh - 140px);overflow:auto;background:#111114;border:1px solid var(--line);border-radius:24px;box-shadow:0 30px 80px rgba(0,0,0,.6);padding:20px;display:none;z-index:100}.panel.open{display:block}.panel h2{margin:0 0 14px;font-size:22px}.presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}.preset{border:1px solid #34343a;background:#1c1c20;color:#fff;border-radius:999px;padding:9px 12px;font-weight:800;font-size:13px}.row{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;margin-bottom:8px}.row input,.key{background:#070708;border:1px solid #303036;color:#fff;border-radius:12px;padding:11px;font-size:13px}.keyrow{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:14px}.btn{border:0;border-radius:12px;background:#fff;color:#000;font-weight:900;padding:11px 14px;cursor:pointer}.del{background:#2a2a2e;color:#fff;border:0;border-radius:12px;padding:0 12px;font-size:18px}.hint{font-size:13px;line-height:1.35;color:var(--muted);margin-top:10px}.gm-style{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Arial,sans-serif!important}.gm-style-cc,.gmnoprint a,.gmnoprint span{opacity:.35!important}
+@media(max-height:760px){.app{padding-top:22px;padding-bottom:24px;gap:14px}.top{height:54px}.nano{font-size:44px}.traffic{font-size:31px}.cardInner{padding-top:20px}.count3 .cardInner,.count4 .cardInner{padding-top:16px}.routeName{font-size:clamp(26px,2.2vw,46px)}.num{font-size:clamp(58px,5.6vw,118px)}}
 </style>
-</head><body>
-<div class="app">
-  <header class="top"><div class="brand"><div class="nano">nano.</div><div class="traffic">traffic</div></div><button class="gear" onclick="toggleSettings()">⚙︎</button></header>
-  <main id="grid" class="grid"></main>
-  <footer class="foot"><div id="updated">Lade Fahrzeiten …</div><div class="clock" id="clock">--:--</div></footer>
-</div>
-<section class="panel" id="settings"><h2>Wege bearbeiten</h2><div class="keyrow"><input class="key" id="apiKey" placeholder="Google API-Key"><button class="btn" onclick="saveApiKey()">Key speichern</button></div><div class="presets" id="presets"></div><div id="routeRows"></div><button class="btn" onclick="addEmptyRoute()">+ Eigene Route</button><div class="hint">Presets füllen Wegname, Start und Ziel automatisch. Maximal 4 aktive Wege. Änderungen speichern sofort.</div></section>
+</head>
+<body>
+<header>
+  <div class="brand"><img class="logo" src="data:image/png;base64,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" alt="nano."><div class="traffic">traffic</div></div>
+  <button class="gear" id="settingsBtn" title="Einstellungen">⚙</button>
+</header>
+<main>
+  <section class="grid" id="grid"></section>
+  <div class="footer"><span id="footer">Noch nicht aktualisiert</span><span id="clock"></span></div>
+</main>
+<dialog id="settings">
+  <div class="panel">
+    <div class="panel-head"><h2>Wege bearbeiten</h2><button class="close" id="closeBtn">×</button></div>
+    <div class="api"><label>Google API-Key</label><input id="apiKey" placeholder="AIza…"></div>
+    
+    <div class="preset-box">
+      <div class="preset-title">Presets</div>
+      <div class="preset-grid" id="presetButtons"></div>
+    </div>
+    <div class="routes" id="routeEditors"></div>
+    <p class="hint">Name, Start und Ziel reichen. Die normale Dauer und Verkehrsdauer berechnet Google automatisch. Eingaben werden sofort im Browser gespeichert.</p>
+    <div class="actions"><button class="btn secondary" id="refreshBtn">Aktualisieren</button><button class="btn primary" id="saveBtn">Speichern</button></div>
+  </div>
+</dialog>
 <script>
-const ADDR={home:"Hermann-Becker-Str. 10, 50672 Köln",rtl:"Picassoplatz 1, 50679 Köln",lager:"Methweg 22, 50672 Köln",mmc:"Butzweilerstraße 255, 50829 Köln",mediatec:"Widdersdorfer Str. 217, 50825 Köln"};
-const PRESETS=[
- {name:"Zuhause → nano Lager",start:ADDR.home,target:ADDR.lager},{name:"Zuhause → RTL",start:ADDR.home,target:ADDR.rtl},{name:"Zuhause → Mediatec",start:ADDR.home,target:ADDR.mediatec},{name:"Zuhause → MMC",start:ADDR.home,target:ADDR.mmc},
- {name:"nano Lager → RTL",start:ADDR.lager,target:ADDR.rtl},{name:"RTL → nano Lager",start:ADDR.rtl,target:ADDR.lager},{name:"nano Lager → Mediatec",start:ADDR.lager,target:ADDR.mediatec},{name:"Mediatec → nano Lager",start:ADDR.mediatec,target:ADDR.lager},{name:"MMC → RTL",start:ADDR.mmc,target:ADDR.rtl},{name:"RTL → MMC",start:ADDR.rtl,target:ADDR.mmc}
+const STORAGE_KEY = 'nanoTraffic.settings.v1';
+const OLD_KEYS = ['nanoTraffic.v3','nanoTraffic.v2','routes_v2'];
+
+const ADDRESS_BOOK = {
+  zuhause: 'Hermann-Becker-Str. 10, 50672 Köln',
+  rtl: 'Picassoplatz 1, 50679 Köln',
+  lager: 'Methweg 22, 50672 Köln',
+  mmc: 'Butzweilerstraße 255, 50829 Köln',
+  mediatec: 'Widdersdorfer Str. 217, 50825 Köln'
+};
+const PRESETS = [
+  {name:'Zuhause → RTL', start:ADDRESS_BOOK.zuhause, end:ADDRESS_BOOK.rtl},
+  {name:'Zuhause → nano Lager', start:ADDRESS_BOOK.zuhause, end:ADDRESS_BOOK.lager},
+  {name:'Zuhause → MMC Studios', start:ADDRESS_BOOK.zuhause, end:ADDRESS_BOOK.mmc},
+  {name:'Zuhause → Mediatec', start:ADDRESS_BOOK.zuhause, end:ADDRESS_BOOK.mediatec},
+  {name:'nano Lager → RTL', start:ADDRESS_BOOK.lager, end:ADDRESS_BOOK.rtl},
+  {name:'nano Lager → MMC Studios', start:ADDRESS_BOOK.lager, end:ADDRESS_BOOK.mmc},
+  {name:'nano Lager → Mediatec', start:ADDRESS_BOOK.lager, end:ADDRESS_BOOK.mediatec},
+  {name:'RTL → nano Lager', start:ADDRESS_BOOK.rtl, end:ADDRESS_BOOK.lager},
+  {name:'MMC Studios → nano Lager', start:ADDRESS_BOOK.mmc, end:ADDRESS_BOOK.lager},
+  {name:'Mediatec → nano Lager', start:ADDRESS_BOOK.mediatec, end:ADDRESS_BOOK.lager}
 ];
-const DEFAULT=[PRESETS[0]];let mapsReady=false,mapsLoading=false,currentRoutes=[],mapObjs=[];
-const styles=[{elementType:"geometry",stylers:[{color:"#0c0d10"}]},{elementType:"labels.text.stroke",stylers:[{color:"#0c0d10"}]},{elementType:"labels.text.fill",stylers:[{color:"#7f8594"}]},{featureType:"road",elementType:"geometry",stylers:[{color:"#20242b"}]},{featureType:"road",elementType:"labels.icon",stylers:[{visibility:"off"}]},{featureType:"road.highway",elementType:"geometry",stylers:[{color:"#2a3038"}]},{featureType:"water",elementType:"geometry",stylers:[{color:"#08090b"}]},{featureType:"poi",stylers:[{visibility:"off"}]},{featureType:"transit",stylers:[{visibility:"off"}]},{featureType:"administrative",elementType:"geometry",stylers:[{color:"#1f232a"}]}];
-function loadRoutes(){try{return JSON.parse(localStorage.getItem("routes_v3")||localStorage.getItem("routes_v2"))||DEFAULT}catch{return DEFAULT}}
-function saveRoutesData(r){localStorage.setItem("routes_v3",JSON.stringify(r.slice(0,4)));localStorage.setItem("nanoTrafficBackup",JSON.stringify({routes:r.slice(0,4),key:loadKey(),ts:Date.now()}))}
-function loadKey(){return localStorage.getItem("google_maps_api_key")||localStorage.getItem("nano_google_key")||""}
-function saveKey(k){localStorage.setItem("google_maps_api_key",k);localStorage.setItem("nano_google_key",k)}
-function esc(s){return String(s??"").replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
-function clean(a){return String(a||"").replace(/, Deutschland$/i,"")}
-function mapsUrl(s,t){return`https://www.google.com/maps/dir/?api=1&travelmode=driving&origin=${encodeURIComponent(s)}&destination=${encodeURIComponent(t)}`}
-function stat(m,n){let r=m/Math.max(1,n);return r<=1.12?{c:"good",t:"Alles frei"}:r<=1.28?{c:"medium",t:`+${Math.round((r-1)*100)} % länger`}:{c:"bad",t:`+${Math.round((r-1)*100)} % länger`}}
-function tick(){clock.textContent=new Date().toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"})}setInterval(tick,1000);tick();
-function render(){currentRoutes=loadRoutes().filter(r=>r.start&&r.target).slice(0,4);if(!currentRoutes.length)currentRoutes=DEFAULT;grid.className=`grid count${currentRoutes.length}`;grid.innerHTML="";mapObjs=[];currentRoutes.forEach((r,i)=>{let el=document.createElement("article");el.className="card loading";el.id=`card-${i}`;el.innerHTML=`<div class="cardInner"><div class="routeName">${esc(r.name||`${r.start} → ${r.target}`)}</div><div class="rule"></div><div class="places"><div class="ico">○</div><div class="addr">${esc(clean(r.start))}</div><div class="dots">••••</div><div></div><div class="ico">⌖</div><div class="addr">${esc(clean(r.target))}</div></div><div class="timeRow"><div class="num" id="num-${i}">…</div><div class="unit">min</div></div><div class="normal" id="normal-${i}">Normal: –</div><div class="badge" id="badge-${i}">Lädt</div></div><div class="mapBox"><div class="mapLabel" id="mapLabel-${i}">ROUTE + VERKEHR</div><div class="map" id="map-${i}"></div></div>`;grid.appendChild(el)});updated.textContent="Lade Fahrzeiten …"}
-function loadGoogle(){let k=loadKey();if(!k){updated.textContent="API-Key fehlt · ⚙︎ öffnen";return} if(mapsReady){refreshAll();return} if(mapsLoading)return;mapsLoading=true;let old=document.getElementById("gmaps");if(old)old.remove();let s=document.createElement("script");s.id="gmaps";s.async=true;s.defer=true;s.src=`https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(k)}&callback=initMaps`;s.onerror=()=>updated.textContent="Google Maps konnte nicht geladen werden";document.head.appendChild(s)}
-window.initMaps=()=>{mapsReady=true;mapsLoading=false;refreshAll()};
-function refreshAll(){render();if(!loadKey()){updated.textContent="API-Key fehlt · ⚙︎ öffnen";return}if(!mapsReady){loadGoogle();return}const dm=new google.maps.DistanceMatrixService();currentRoutes.forEach((r,i)=>{dm.getDistanceMatrix({origins:[r.start],destinations:[r.target],travelMode:google.maps.TravelMode.DRIVING,drivingOptions:{departureTime:new Date(),trafficModel:google.maps.TrafficModel.BEST_GUESS},unitSystem:google.maps.UnitSystem.METRIC},(res,status)=>{if(status!=="OK"){setErr(i,status);return}let e=res.rows?.[0]?.elements?.[0];if(!e||e.status!=="OK"){setErr(i,e?.status||"Route nicht gefunden");return}let m=Math.max(1,Math.round((e.duration_in_traffic?.value||e.duration.value)/60));let n=Math.max(1,Math.round(e.duration.value/60));let s=stat(m,n);document.getElementById(`card-${i}`).className=`card ${s.c}`;document.getElementById(`num-${i}`).textContent=m;document.getElementById(`normal-${i}`).textContent=`Normal: ${n} min`;document.getElementById(`badge-${i}`).textContent=s.t;updated.textContent="↻ Aktualisiert: "+new Date().toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"});});drawMap(r,i)})}
-function setErr(i,msg){let b=document.getElementById(`badge-${i}`); if(b)b.textContent=msg; let ml=document.getElementById(`mapLabel-${i}`); if(ml)ml.textContent=String(msg).toUpperCase()}
-function drawMap(r,i){let box=document.getElementById(`map-${i}`);if(!box)return;let map=new google.maps.Map(box,{zoom:12,center:{lat:50.9375,lng:6.9603},disableDefaultUI:true,styles,gestureHandling:"none",keyboardShortcuts:false});new google.maps.TrafficLayer().setMap(map);let renderer=new google.maps.DirectionsRenderer({map,preserveViewport:false,suppressMarkers:false,polylineOptions:{strokeColor:"#29d36b",strokeOpacity:1,strokeWeight:11},markerOptions:{opacity:.95}});let svc=new google.maps.DirectionsService();svc.route({origin:r.start,destination:r.target,travelMode:google.maps.TravelMode.DRIVING,drivingOptions:{departureTime:new Date(),trafficModel:google.maps.TrafficModel.BEST_GUESS},provideRouteAlternatives:false},(result,status)=>{let label=document.getElementById(`mapLabel-${i}`);if(status==="OK"){renderer.setDirections(result); if(label)label.textContent="ROUTE + VERKEHR"; setTimeout(()=>google.maps.event.trigger(map,"resize"),200)}else{if(label)label.textContent="ROUTE NICHT SICHTBAR · "+status}})}
-function toggleSettings(){settings.classList.toggle("open");renderSettings()}
-function renderSettings(){apiKey.value=loadKey();presets.innerHTML="";PRESETS.forEach(p=>{let b=document.createElement("button");b.className="preset";b.textContent=p.name;b.onclick=()=>addPreset(p);presets.appendChild(b)});drawRows()}
-function drawRows(){let rows=routeRows;rows.innerHTML="";loadRoutes().slice(0,4).forEach((r,i)=>{let row=document.createElement("div");row.className="row";row.innerHTML=`<input data-i="${i}" data-k="name" placeholder="Wegname" value="${esc(r.name||"")}"><input data-i="${i}" data-k="start" placeholder="Start" value="${esc(r.start||"")}"><input data-i="${i}" data-k="target" placeholder="Ziel" value="${esc(r.target||"")}"><button class="del" onclick="delRoute(${i})">×</button>`;rows.appendChild(row)});rows.querySelectorAll("input").forEach(inp=>inp.oninput=saveFromRows)}
-function saveFromRows(){let r=[];document.querySelectorAll("#routeRows .row").forEach(row=>{let name=row.querySelector('[data-k="name"]').value.trim(),start=row.querySelector('[data-k="start"]').value.trim(),target=row.querySelector('[data-k="target"]').value.trim();if(start&&target)r.push({name,start,target})});saveRoutesData(r);refreshAll()}
-function addPreset(p){let r=loadRoutes().filter(x=>x.start&&x.target);if(r.length>=4)r.shift();r.push({...p});saveRoutesData(r);drawRows();refreshAll()}
-function delRoute(i){let r=loadRoutes();r.splice(i,1);saveRoutesData(r);drawRows();refreshAll()}
-function addEmptyRoute(){let r=loadRoutes();if(r.length<4)r.push({name:"",start:"",target:""});saveRoutesData(r);drawRows()}
-function saveApiKey(){saveKey(apiKey.value.trim());mapsReady=false;mapsLoading=false;refreshAll()}
-render();renderSettings();loadGoogle();setInterval(refreshAll,5*60*1000);let tm;document.addEventListener("mousemove",()=>{document.body.style.cursor="default";clearTimeout(tm);tm=setTimeout(()=>document.body.style.cursor="none",5000)});
+
+const DEFAULTS = { apiKey:'', routes:[
+  {name:'Zuhause → nano Lager', start:'Hermann-Becker-Str. 10, 50672 Köln', end:'Methweg 22, 50672 Köln'},
+  {name:'nano Lager → RTL', start:'Methweg 22, 50672 Köln', end:'Picassoplatz 1, 50679 Köln'},
+  {name:'nano Lager → Mediatec', start:'Methweg 22, 50672 Köln', end:'Widdersdorfer Str. 217, 50825 Köln'}
+]};
+let state = loadState();
+let mapsLoading = false;
+const routeMaps = {};
+const DARK_MAP_STYLE = [
+  {elementType:"geometry",stylers:[{color:"#111217"}]},{elementType:"labels.text.stroke",stylers:[{color:"#111217"}]},{elementType:"labels.text.fill",stylers:[{color:"#8b8b92"}]},
+  {featureType:"administrative",elementType:"geometry",stylers:[{visibility:"off"}]},{featureType:"poi",stylers:[{visibility:"off"}]},{featureType:"transit",stylers:[{visibility:"off"}]},
+  {featureType:"road",elementType:"geometry",stylers:[{color:"#252832"}]},{featureType:"road",elementType:"geometry.stroke",stylers:[{color:"#0b0c10"}]},{featureType:"road",elementType:"labels.text.fill",stylers:[{color:"#c5c7ce"}]},
+  {featureType:"road.highway",elementType:"geometry",stylers:[{color:"#303443"}]},{featureType:"road.highway",elementType:"geometry.stroke",stylers:[{color:"#14161c"}]},
+  {featureType:"water",elementType:"geometry",stylers:[{color:"#07080b"}]},{featureType:"landscape",elementType:"geometry",stylers:[{color:"#0f1015"}]}
+];
+function cloneDefaults(){ return JSON.parse(JSON.stringify(DEFAULTS)); }
+function normalizeState(raw) {
+  const base = cloneDefaults();
+  if (!raw || typeof raw !== 'object') return base;
+  if (Array.isArray(raw)) raw = {routes: raw};
+  if (raw.apiKey) base.apiKey = raw.apiKey;
+  const legacyKey = localStorage.getItem('google_maps_api_key');
+  if (!base.apiKey && legacyKey) base.apiKey = legacyKey;
+  if (Array.isArray(raw.routes)) {
+    base.routes = raw.routes.map(r => ({
+      name: r.name || ((r.start && (r.end || r.target)) ? `${r.start} → ${r.end || r.target}` : ''),
+      start: r.start || '',
+      end: r.end || r.target || ''
+    })).filter(r => r.name || r.start || r.end).slice(0,4);
+  }
+  return base;
+}
+function loadState() {
+  try {
+    let raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) for (const k of OLD_KEYS) { raw = localStorage.getItem(k); if (raw) break; }
+    const loaded = normalizeState(raw ? JSON.parse(raw) : null);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(loaded));
+    return loaded;
+  } catch(e) { return cloneDefaults(); }
+}
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  localStorage.setItem('google_maps_api_key', state.apiKey || ''); // Backup für alte Versionen
+}
+function cleanAddress(s) { return (s||'').replace(/,?\s*Deutschland\s*$/i,'').trim() || '—'; }
+function shortPlace(s) { return cleanAddress(s); }
+function mapsUrl(r) { return 'https://www.google.com/maps/dir/?api=1&travelmode=driving&origin='+encodeURIComponent(r.start)+'&destination='+encodeURIComponent(r.end); }
+function renderCards(data={}) {
+  const grid=document.getElementById('grid'); grid.innerHTML='';
+  const count=Math.max(1, Math.min(4, state.routes.length));
+  grid.className='grid routes-'+count;
+  state.routes.slice(0,4).forEach((r,i)=>{
+    const d=data[i]||{}; const has=d.trafficMin; const ratio=has && d.normalMin ? d.trafficMin/d.normalMin : 1;
+    let cls='green', txt='Alles frei';
+    if (has && ratio>1.2) { cls='red'; txt='+'+Math.round((ratio-1)*100)+' % länger'; }
+    else if (has && ratio>1.1) { cls='yellow'; txt='+'+Math.round((ratio-1)*100)+' % länger'; }
+    const time=has ? d.trafficMin : '–'; const normal= d.normalMin ? 'Normal: '+d.normalMin+' min' : 'Normal: –';
+    const err=d.error ? '<div class="normal">'+d.error+'</div>' : '<div class="normal">'+normal+'</div>';
+    grid.insertAdjacentHTML('beforeend', `
+      <article class="card ${has?'':'empty'}">
+        <div class="card-inner">
+          <div class="card-copy">
+            <h3 class="route-name">${escapeHtml(r.name||'Weg '+(i+1))}</h3><div class="rule"></div>
+            <div class="places"><div class="circle"></div><div class="addr">${escapeHtml(cleanAddress(r.start))}</div><div class="dots"></div><div></div><div class="pin">⌖</div><div class="addr">${escapeHtml(cleanAddress(r.end))}</div></div>
+            <div class="time ${cls}"><span class="num">${time}</span><span class="unit">min</span></div>${err}
+            <div class="status ${cls}"><span class="dot"></span><span>${has?txt:'Warte auf Daten'}</span></div>
+          </div>
+          <div class="map-wrap"><div class="map-label">Route + Verkehr</div><div class="route-map" id="map-${i}"></div></div>
+        </div>
+        <a class="open" href="${mapsUrl(r)}" target="_blank"><span>⌖ Route öffnen</span><span class="arrow">→</span></a>
+      </article>`);
+  });
+}
+function escapeHtml(str) { return String(str||'').replace(/[&<>'"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
+
+function clearMapOverlays(current) {
+  ['routeShadow','routeLine','startMarker','endMarker'].forEach(k => { if(current[k]) { current[k].setMap(null); current[k]=null; } });
+  if(current.renderer) { current.renderer.setMap(null); current.renderer=null; }
+}
+function drawRouteMap(index, route) {
+  const el = document.getElementById('map-'+index);
+  if(!el || !window.google?.maps || !route?.start || !route?.end) return;
+  const current = routeMaps[index] || {};
+  if(!current.map) {
+    current.map = new google.maps.Map(el, {
+      center:{lat:50.9375,lng:6.9603}, zoom:12, styles:DARK_MAP_STYLE,
+      disableDefaultUI:true, gestureHandling:'none', backgroundColor:'#08090b'
+    });
+    current.traffic = new google.maps.TrafficLayer();
+    current.traffic.setMap(current.map);
+    current.service = new google.maps.DirectionsService();
+    routeMaps[index] = current;
+  }
+  const signature = route.start+' → '+route.end;
+  if(current.signature === signature && current.routeLine) {
+    setTimeout(()=>google.maps.event.trigger(current.map,'resize'),120);
+    return;
+  }
+  current.signature = signature;
+  clearMapOverlays(current);
+  current.service.route({
+    origin: route.start, destination: route.end, travelMode: google.maps.TravelMode.DRIVING,
+    drivingOptions:{ departureTime:new Date(), trafficModel: google.maps.TrafficModel.BEST_GUESS }
+  }, (res, status) => {
+    if(status !== 'OK' || !res?.routes?.[0]) {
+      console.warn('Directions route failed:', status);
+      const label = el.parentElement?.querySelector('.map-label');
+      if(label) label.textContent = 'Route nicht sichtbar · '+status;
+      return;
+    }
+    const r0 = res.routes[0];
+    const leg = r0.legs?.[0];
+
+    // Erst den offiziellen Google-Routenrenderer setzen, damit die Route sicher gezeichnet wird.
+    current.renderer = new google.maps.DirectionsRenderer({
+      map: current.map,
+      directions: res,
+      routeIndex: 0,
+      suppressMarkers: true,
+      preserveViewport: true,
+      polylineOptions: {
+        strokeColor:'#29d36b', strokeOpacity:1, strokeWeight:10, zIndex:999
+      }
+    });
+
+    // Zusätzlich zeichnen wir eine extra dicke Kontur + Nano-Grün aus allen Step-Pfaden.
+    // Das macht die Route auf dunkler Karte und über dem Traffic-Layer deutlich sichtbar.
+    const path = [];
+    (leg?.steps || []).forEach(step => (step.path || []).forEach(p => path.push(p)));
+    if(!path.length && r0.overview_path) r0.overview_path.forEach(p => path.push(p));
+    const bounds = new google.maps.LatLngBounds();
+    path.forEach(p => bounds.extend(p));
+    current.routeShadow = new google.maps.Polyline({
+      path, map:current.map, strokeColor:'#020304', strokeOpacity:1, strokeWeight:22, zIndex:1000
+    });
+    current.routeLine = new google.maps.Polyline({
+      path, map:current.map, strokeColor:'#29d36b', strokeOpacity:1, strokeWeight:13, zIndex:1001
+    });
+
+
+    if(leg?.start_location) current.startMarker = new google.maps.Marker({
+      position:leg.start_location, map:current.map, title:'Start',
+      icon:{ path:google.maps.SymbolPath.CIRCLE, scale:8, fillColor:'#0b0b0c', fillOpacity:1, strokeColor:'#f5f5f7', strokeWeight:4 }
+    });
+    if(leg?.end_location) current.endMarker = new google.maps.Marker({
+      position:leg.end_location, map:current.map, title:'Ziel',
+      icon:{ path:google.maps.SymbolPath.CIRCLE, scale:8, fillColor:'#29d36b', fillOpacity:1, strokeColor:'#f5f5f7', strokeWeight:3 }
+    });
+
+    current.map.fitBounds(bounds, {top:70,right:70,bottom:70,left:70});
+    setTimeout(()=>google.maps.event.trigger(current.map,'resize'),120);
+  });
+}
+function drawVisibleMaps() {
+  state.routes.slice(0,4).forEach((r,i)=>drawRouteMap(i,r));
+}
+function renderEditors() {
+  document.getElementById('apiKey').value=state.apiKey||'';
+  const box=document.getElementById('routeEditors'); box.innerHTML='';
+  renderPresetButtons();
+  for(let i=0;i<4;i++) { const r=state.routes[i]||{name:'',start:'',end:''}; box.insertAdjacentHTML('beforeend', `
+    <div class="edit-row">
+      <div><label>Wegname</label><input data-i="${i}" data-k="name" value="${escapeHtml(r.name)}" placeholder="Zuhause → nano Lager"></div>
+      <div><label>Start</label><input data-i="${i}" data-k="start" value="${escapeHtml(r.start)}" placeholder="Adresse oder Ort"></div>
+      <div><label>Ziel</label><input data-i="${i}" data-k="end" value="${escapeHtml(r.end)}" placeholder="Adresse oder Ort"></div>
+      <button class="clear-route" type="button" onclick="clearRoute(${i})" title="Route löschen">×</button>
+    </div>`); }
+  document.querySelectorAll('#settings input').forEach(inp => inp.addEventListener('input', () => { collectEditors(); saveState(); }, {passive:true}));
+}
+
+function renderPresetButtons() {
+  const box=document.getElementById('presetButtons'); if(!box) return;
+  box.innerHTML='';
+  PRESETS.forEach((p,i)=>box.insertAdjacentHTML('beforeend', `<button class="preset" data-preset="${i}" type="button">${escapeHtml(p.name)}</button>`));
+  box.querySelectorAll('[data-preset]').forEach(btn=>btn.addEventListener('click',()=>applyPreset(+btn.dataset.preset)));
+}
+function applyPreset(i) {
+  collectEditors();
+  const p=PRESETS[i]; if(!p) return;
+  const exists=state.routes.findIndex(r=>r.name===p.name || (r.start===p.start && r.end===p.end));
+  if(exists>=0) state.routes[exists]={...p};
+  else {
+    const routes=state.routes.filter(r=>r.name||r.start||r.end).slice(0,4);
+    if(routes.length<4) routes.push({...p}); else routes[0]={...p};
+    state.routes=routes;
+  }
+  saveState(); renderEditors(); updateTimes();
+}
+function clearRoute(i) {
+  collectEditors();
+  state.routes[i]={name:'',start:'',end:''};
+  state.routes=state.routes.filter(r=>r.name||r.start||r.end).slice(0,4);
+  saveState(); renderEditors(); updateTimes();
+}
+
+function collectEditors() {
+  state.apiKey=document.getElementById('apiKey').value.trim();
+  const routes=[{},{},{},{}];
+  document.querySelectorAll('[data-i]').forEach(inp=>{ routes[+inp.dataset.i][inp.dataset.k]=inp.value.trim(); });
+  state.routes=routes.filter(r=>r.name||r.start||r.end).slice(0,4);
+}
+function loadGoogle() { return new Promise((resolve,reject)=>{
+  if(window.google?.maps) return resolve();
+  if(!state.apiKey) return reject(new Error('API-Key fehlt'));
+  if(mapsLoading) { const t=setInterval(()=>{ if(window.google?.maps) {clearInterval(t); resolve();} },200); return; }
+  mapsLoading=true; window.__nanoMapsReady=()=>resolve();
+  const s=document.createElement('script'); s.src='https://maps.googleapis.com/maps/api/js?key='+encodeURIComponent(state.apiKey)+'&callback=__nanoMapsReady&v=weekly'; s.async=true; s.onerror=()=>reject(new Error('Google Maps konnte nicht geladen werden')); document.head.appendChild(s);
+}); }
+async function updateTimes() {
+  renderCards();
+  try { await loadGoogle(); } catch(e) { renderCards(Object.fromEntries(state.routes.map((_,i)=>[i,{error:e.message}]))); return; }
+  const service=new google.maps.DistanceMatrixService(); const results={};
+  await Promise.all(state.routes.map((r,i)=> new Promise(resolve=>{
+    if(!r.start||!r.end) { results[i]={error:'Start/Ziel fehlt'}; return resolve(); }
+    service.getDistanceMatrix({ origins:[r.start], destinations:[r.end], travelMode:'DRIVING', drivingOptions:{departureTime:new Date(), trafficModel:'bestguess'}, unitSystem:google.maps.UnitSystem.METRIC }, (res,status)=>{
+      if(status!=='OK') results[i]={error:status}; else { const el=res.rows?.[0]?.elements?.[0]; if(!el||el.status!=='OK') results[i]={error:el?.status||'Keine Route'}; else results[i]={ normalMin:Math.round(el.duration.value/60), trafficMin:Math.round((el.duration_in_traffic?.value||el.duration.value)/60) }; }
+      resolve();
+    });
+  })));
+  renderCards(results);
+  requestAnimationFrame(drawVisibleMaps);
+  document.getElementById('footer').textContent='↻ Aktualisiert: '+new Date().toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
+}
+document.getElementById('settingsBtn').onclick=()=>{renderEditors(); document.getElementById('settings').showModal();};
+document.getElementById('closeBtn').onclick=()=>document.getElementById('settings').close();
+document.getElementById('saveBtn').onclick=()=>{ collectEditors(); saveState(); document.getElementById('settings').close(); updateTimes(); };
+document.getElementById('refreshBtn').onclick=()=>{ collectEditors(); saveState(); updateTimes(); };
+renderCards(); renderEditors(); if(!state.apiKey) document.getElementById('settings').showModal(); else updateTimes();
+function updateClock(){ const el=document.getElementById('clock'); if(el) el.textContent=new Date().toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'}); }
+updateClock(); setInterval(updateClock, 15000);
+let cursorTimer; function hideCursorSoon(){ document.body.style.cursor='default'; clearTimeout(cursorTimer); cursorTimer=setTimeout(()=>{document.body.style.cursor='none';},5000); }
+window.addEventListener('mousemove', hideCursorSoon); hideCursorSoon();
+setInterval(updateTimes, 5*60*1000);
 </script>
-</body></html>
+</body>
+</html>
