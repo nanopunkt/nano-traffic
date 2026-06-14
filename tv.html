@@ -164,6 +164,104 @@
     .panel.open { position:fixed; inset:40px; z-index:30; overflow:auto; }
   }
 
+
+  /* vNext: TV-safe header + maps on every route card */
+  @media (min-width: 900px) {
+    body { overflow:hidden; }
+    header {
+      position:fixed !important;
+      top:0; left:0; right:0;
+      height:92px !important;
+      min-height:92px !important;
+      padding:18px clamp(32px,4vw,64px) 16px !important;
+      border-bottom:1px solid rgba(255,255,255,.08) !important;
+      background:rgba(10,10,12,.78) !important;
+      backdrop-filter:blur(18px);
+      z-index:10;
+    }
+    header .brand { display:flex !important; }
+    .logo { width:190px !important; height:50px !important; }
+    .traffic { font-size:34px !important; padding-bottom:3px !important; }
+    .gear { position:static !important; opacity:.35; transform:scale(.86); }
+    .gear:hover { opacity:1; }
+
+    main {
+      height:100vh !important;
+      padding:112px clamp(24px,3.2vw,52px) 58px !important;
+    }
+    .footer {
+      position:fixed; left:clamp(28px,3.2vw,60px); right:clamp(28px,3.2vw,60px); bottom:18px;
+      margin:0; max-width:none; pointer-events:none; font-size:clamp(15px,1.1vw,22px);
+    }
+    .grid { height:100%; gap:clamp(16px,1.8vw,28px); max-width:none !important; }
+    .card { min-height:0; border-radius:28px; }
+    .card-inner { min-height:0; }
+    .route-name { white-space:normal !important; overflow:visible !important; text-overflow:clip !important; line-height:1.05 !important; }
+
+    .grid.routes-1 .card-inner {
+      display:grid; grid-template-columns:minmax(540px,.78fr) minmax(560px,1.22fr);
+      gap:clamp(32px,4vw,72px); align-items:stretch;
+      padding:clamp(38px,5vh,62px) clamp(46px,4.8vw,86px) clamp(36px,4.6vh,58px);
+    }
+    .grid.routes-1 .map-wrap { display:block; min-height:100%; margin-top:0; }
+    .grid.routes-1 .route-name { font-size:clamp(42px,3.8vw,64px); }
+    .grid.routes-1 .addr { font-size:clamp(24px,2vw,34px); }
+    .grid.routes-1 .time .num { font-size:clamp(140px,12vw,235px); }
+    .grid.routes-1 .time .unit { font-size:clamp(58px,5vw,92px); }
+
+    .grid.routes-2 .card-inner {
+      padding:clamp(24px,2.8vh,38px) clamp(28px,3vw,52px) clamp(22px,2.4vh,34px);
+      display:flex; flex-direction:column;
+    }
+    .grid.routes-2 .route-name { font-size:clamp(28px,2.3vw,42px); margin-bottom:clamp(12px,1.6vh,22px); }
+    .grid.routes-2 .rule { margin-bottom:clamp(14px,1.8vh,28px); }
+    .grid.routes-2 .places { min-height:clamp(92px,13vh,142px); row-gap:8px; }
+    .grid.routes-2 .addr { font-size:clamp(18px,1.45vw,26px); }
+    .grid.routes-2 .dots { height:clamp(34px,4.5vh,52px); }
+    .grid.routes-2 .time { margin-top:clamp(12px,2vh,26px); }
+    .grid.routes-2 .time .num { font-size:clamp(80px,7.4vw,142px); }
+    .grid.routes-2 .time .unit { font-size:clamp(34px,3.4vw,62px); }
+    .grid.routes-2 .normal { margin-top:10px; font-size:clamp(16px,1.25vw,22px); }
+    .grid.routes-2 .status { margin-top:14px; font-size:clamp(16px,1.25vw,22px); padding:10px 14px; width:max-content; max-width:100%; }
+    .grid.routes-2 .map-wrap { display:block; min-height:clamp(130px,17vh,205px); margin-top:16px; }
+
+    .grid.routes-3, .grid.routes-4 { grid-template-columns:repeat(2,1fr); }
+    .grid.routes-3 .card-inner, .grid.routes-4 .card-inner {
+      padding:clamp(16px,1.9vh,26px) clamp(22px,2.3vw,36px) clamp(15px,1.8vh,24px);
+      display:flex; flex-direction:column;
+    }
+    .grid.routes-3 .route-name, .grid.routes-4 .route-name {
+      font-size:clamp(22px,1.95vw,34px); margin:0 0 10px; letter-spacing:-.5px;
+    }
+    .grid.routes-3 .rule, .grid.routes-4 .rule { margin-bottom:10px; }
+    .grid.routes-3 .places, .grid.routes-4 .places {
+      grid-template-columns:22px 1fr; min-height:72px; row-gap:5px; column-gap:12px;
+    }
+    .grid.routes-3 .circle, .grid.routes-4 .circle { width:17px; height:17px; border-width:2px; }
+    .grid.routes-3 .pin, .grid.routes-4 .pin { font-size:22px; transform:translateX(-3px); }
+    .grid.routes-3 .dots, .grid.routes-4 .dots { height:24px; margin-left:7px; border-left-width:5px; }
+    .grid.routes-3 .addr, .grid.routes-4 .addr { font-size:clamp(15px,1.15vw,20px); line-height:1.15; }
+    .grid.routes-3 .time, .grid.routes-4 .time { margin-top:10px; }
+    .grid.routes-3 .time .num, .grid.routes-4 .time .num { font-size:clamp(58px,5.2vw,96px); }
+    .grid.routes-3 .time .unit, .grid.routes-4 .time .unit { font-size:clamp(24px,2.4vw,42px); margin-left:4px; }
+    .grid.routes-3 .normal, .grid.routes-4 .normal { font-size:clamp(13px,1vw,17px); margin-top:6px; }
+    .grid.routes-3 .status, .grid.routes-4 .status {
+      margin-top:8px; font-size:clamp(13px,1vw,17px); padding:8px 11px; border-radius:11px; width:max-content; max-width:100%;
+    }
+    .grid.routes-3 .status .dot, .grid.routes-4 .status .dot { width:10px; height:10px; }
+    .grid.routes-3 .map-wrap, .grid.routes-4 .map-wrap {
+      display:block; min-height:clamp(86px,12vh,130px); margin-top:10px; border-radius:16px;
+    }
+    .grid.routes-3 .map-label, .grid.routes-4 .map-label { font-size:10px; top:8px; left:8px; padding:5px 8px; }
+    .grid.routes-3 .open, .grid.routes-4 .open, .grid.routes-2 .open { display:none; }
+
+    @media (max-width: 1300px) {
+      .grid.routes-1 .card-inner { grid-template-columns:1fr; }
+      .grid.routes-1 .map-wrap { min-height:300px; }
+    }
+    .panel.open { position:fixed; inset:40px; z-index:30; overflow:auto; }
+  }
+
 </style>
 </head>
 <body>
@@ -281,7 +379,7 @@ function renderCards(data={}) {
             <div class="time ${cls}"><span class="num">${time}</span><span class="unit">min</span></div>${err}
             <div class="status ${cls}"><span class="dot"></span><span>${has?txt:'Warte auf Daten'}</span></div>
           </div>
-          <div class="map-wrap"><div class="map-label">Live Route + Verkehr</div><div class="route-map" id="map-${i}"></div></div>
+          <div class="map-wrap"><div class="map-label">Route + Verkehr</div><div class="route-map" id="map-${i}"></div></div>
         </div>
         <a class="open" href="${mapsUrl(r)}" target="_blank"><span>⌖ Route öffnen</span><span class="arrow">→</span></a>
       </article>`);
@@ -321,7 +419,7 @@ function drawRouteMap(index, route) {
     if(status !== 'OK' || !res?.routes?.[0]) {
       console.warn('Directions route failed:', status);
       const label = el.parentElement?.querySelector('.map-label');
-      if(label) label.textContent = 'Route nicht sichtbar · Directions API prüfen';
+      if(label) label.textContent = 'Route nicht sichtbar · '+status;
       return;
     }
     const r0 = res.routes[0];
@@ -420,7 +518,7 @@ function loadGoogle() { return new Promise((resolve,reject)=>{
   if(!state.apiKey) return reject(new Error('API-Key fehlt'));
   if(mapsLoading) { const t=setInterval(()=>{ if(window.google?.maps) {clearInterval(t); resolve();} },200); return; }
   mapsLoading=true; window.__nanoMapsReady=()=>resolve();
-  const s=document.createElement('script'); s.src='https://maps.googleapis.com/maps/api/js?key='+encodeURIComponent(state.apiKey)+'&callback=__nanoMapsReady'; s.async=true; s.onerror=()=>reject(new Error('Google Maps konnte nicht geladen werden')); document.head.appendChild(s);
+  const s=document.createElement('script'); s.src='https://maps.googleapis.com/maps/api/js?key='+encodeURIComponent(state.apiKey)+'&callback=__nanoMapsReady&v=weekly'; s.async=true; s.onerror=()=>reject(new Error('Google Maps konnte nicht geladen werden')); document.head.appendChild(s);
 }); }
 async function updateTimes() {
   renderCards();
