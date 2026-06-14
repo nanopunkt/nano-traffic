@@ -4,10 +4,12 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>nano. traffic</title>
+<meta name="theme-color" content="#0b0b0c" />
 <style>
 
-  :root { --bg:#0b0b0c; --card:#171719; --card2:#1b1b1f; --line:#2a2a2e; --text:#f5f5f7; --muted:#8b8b92; --green:#29d36b; --red:#ff4d4f; --yellow:#ffcc00; }
+  :root { color-scheme: dark; --bg:#0b0b0c; --card:#171719; --card2:#1b1b1f; --line:#2a2a2e; --text:#f5f5f7; --muted:#8b8b92; --green:#29d36b; --red:#ff4d4f; --yellow:#ffcc00; }
   * { box-sizing:border-box }
+  html, body { background:#0b0b0c !important; color:#f5f5f7 !important; }
   body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif; background:radial-gradient(circle at top,#19191d 0%,var(--bg) 46%,#070708 100%); color:var(--text); min-height:100vh; }
   header { min-height:118px; display:flex; align-items:center; justify-content:space-between; padding:28px 36px 22px; border-bottom:1px solid var(--line); background:rgba(10,10,12,.72); backdrop-filter:blur(18px); position:sticky; top:0; z-index:5; }
   .brand { display:flex; align-items:end; gap:22px; }
@@ -20,11 +22,11 @@
   .card-inner { padding:34px 30px 22px; flex:1; }
   .route-name { font-size:25px; font-weight:850; letter-spacing:-.4px; margin:0 0 26px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:var(--text); }
   .rule { height:1px; background:var(--line); margin-bottom:34px; }
-  .places { display:grid; grid-template-columns:28px 1fr; column-gap:15px; row-gap:16px; align-items:center; min-height:142px; }
+  .places { display:grid; grid-template-columns:28px 1fr; column-gap:15px; row-gap:14px; align-items:start; min-height:168px; }
   .circle { width:22px; height:22px; border:3px solid var(--text); border-radius:50%; }
   .pin { font-size:29px; line-height:1; transform:translateX(-3px); color:var(--text); }
   .dots { grid-column:1; width:0; height:52px; border-left:6px dotted #6f737d; margin-left:10px; }
-  .addr { font-size:22px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:var(--text); }
+  .addr { font-size:20px; line-height:1.22; white-space:normal; overflow:visible; text-overflow:clip; color:var(--text); overflow-wrap:anywhere; word-break:normal; padding-top:1px; }
   .time { margin-top:46px; font-weight:950; letter-spacing:-4px; line-height:.9; }
   .time .num { font-size:88px; }
   .time .unit { font-size:44px; margin-left:8px; letter-spacing:-1px; }
@@ -74,12 +76,13 @@
     <div class="panel-head"><h2>Wege bearbeiten</h2><button class="close" id="closeBtn">×</button></div>
     <div class="api"><label>Google API-Key</label><input id="apiKey" placeholder="AIza…"></div>
     <div class="routes" id="routeEditors"></div>
-    <p class="hint">Name, Start und Ziel reichen. Die normale Dauer und Verkehrsdauer berechnet Google automatisch.</p>
+    <p class="hint">Name, Start und Ziel reichen. Die normale Dauer und Verkehrsdauer berechnet Google automatisch. Eingaben werden sofort im Browser gespeichert.</p>
     <div class="actions"><button class="btn secondary" id="refreshBtn">Aktualisieren</button><button class="btn primary" id="saveBtn">Speichern</button></div>
   </div>
 </dialog>
 <script>
-const STORAGE_KEY = 'nanoTraffic.v3';
+const STORAGE_KEY = 'nanoTraffic.settings.v1';
+const OLD_KEYS = ['nanoTraffic.v3','nanoTraffic.v2','routes_v2'];
 const DEFAULTS = { apiKey:'', routes:[
   {name:'Zuhause → Büro', start:'Zuhause', end:'Büro'},
   {name:'Büro → RTL', start:'Büro', end:'RTL Picassoplatz Köln'},
@@ -88,9 +91,38 @@ const DEFAULTS = { apiKey:'', routes:[
 ]};
 let state = loadState();
 let mapsLoading = false;
-function loadState() { try { return {...DEFAULTS, ...JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}')}; } catch(e) { return structuredClone(DEFAULTS); } }
-function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
-function shortPlace(s) { return (s||'').split(',')[0].replace(/Deutschland/gi,'').trim() || '—'; }
+function cloneDefaults(){ return JSON.parse(JSON.stringify(DEFAULTS)); }
+function normalizeState(raw) {
+  const base = cloneDefaults();
+  if (!raw || typeof raw !== 'object') return base;
+  if (Array.isArray(raw)) raw = {routes: raw};
+  if (raw.apiKey) base.apiKey = raw.apiKey;
+  const legacyKey = localStorage.getItem('google_maps_api_key');
+  if (!base.apiKey && legacyKey) base.apiKey = legacyKey;
+  if (Array.isArray(raw.routes)) {
+    base.routes = raw.routes.map(r => ({
+      name: r.name || ((r.start && (r.end || r.target)) ? `${r.start} → ${r.end || r.target}` : ''),
+      start: r.start || '',
+      end: r.end || r.target || ''
+    })).filter(r => r.name || r.start || r.end).slice(0,4);
+  }
+  return base;
+}
+function loadState() {
+  try {
+    let raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) for (const k of OLD_KEYS) { raw = localStorage.getItem(k); if (raw) break; }
+    const loaded = normalizeState(raw ? JSON.parse(raw) : null);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(loaded));
+    return loaded;
+  } catch(e) { return cloneDefaults(); }
+}
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  localStorage.setItem('google_maps_api_key', state.apiKey || ''); // Backup für alte Versionen
+}
+function cleanAddress(s) { return (s||'').replace(/,?\s*Deutschland\s*$/i,'').trim() || '—'; }
+function shortPlace(s) { return cleanAddress(s); }
 function mapsUrl(r) { return 'https://www.google.com/maps/dir/?api=1&travelmode=driving&origin='+encodeURIComponent(r.start)+'&destination='+encodeURIComponent(r.end); }
 function renderCards(data={}) {
   const grid=document.getElementById('grid'); grid.innerHTML='';
@@ -105,7 +137,7 @@ function renderCards(data={}) {
       <article class="card ${has?'':'empty'}">
         <div class="card-inner">
           <h3 class="route-name">${escapeHtml(r.name||'Weg '+(i+1))}</h3><div class="rule"></div>
-          <div class="places"><div class="circle"></div><div class="addr">${escapeHtml(shortPlace(r.start))}</div><div class="dots"></div><div></div><div class="pin">⌖</div><div class="addr">${escapeHtml(shortPlace(r.end))}</div></div>
+          <div class="places"><div class="circle"></div><div class="addr">${escapeHtml(cleanAddress(r.start))}</div><div class="dots"></div><div></div><div class="pin">⌖</div><div class="addr">${escapeHtml(cleanAddress(r.end))}</div></div>
           <div class="time ${cls}"><span class="num">${time}</span><span class="unit">min</span></div>${err}
           <div class="status ${cls}"><span class="dot"></span><span>${has?txt:'Warte auf Daten'}</span></div>
         </div>
@@ -123,6 +155,7 @@ function renderEditors() {
       <div><label>Start</label><input data-i="${i}" data-k="start" value="${escapeHtml(r.start)}" placeholder="Adresse oder Ort"></div>
       <div><label>Ziel</label><input data-i="${i}" data-k="end" value="${escapeHtml(r.end)}" placeholder="Adresse oder Ort"></div>
     </div>`); }
+  document.querySelectorAll('#settings input').forEach(inp => inp.addEventListener('input', () => { collectEditors(); saveState(); }, {passive:true}));
 }
 function collectEditors() {
   state.apiKey=document.getElementById('apiKey').value.trim();
