@@ -259,7 +259,21 @@ function formatDuration(mins){
   return `${h}:${String(m).padStart(2,"0")}`;
 }
 
-function stat(m,n){let r=m/Math.max(1,n);return r<=1.12?{c:"good",t:"Alles frei"}:r<=1.28?{c:"medium",t:`+${Math.round((r-1)*100)} % länger`}:{c:"bad",t:`+${Math.round((r-1)*100)} % länger`}}
+function formatExtraTime(extraMins){
+  const total = Math.max(0, Math.round(extraMins));
+  const h = Math.floor(total / 60);
+  const m = total % 60;
+  return `+${h}:${String(m).padStart(2,"0")} h länger`;
+}
+function stat(m,n){
+  let r = m / Math.max(1,n);
+  let extra = Math.max(0, m - n);
+  return r <= 1.12
+    ? {c:"good",t:"Alles frei"}
+    : r <= 1.28
+      ? {c:"medium",t:formatExtraTime(extra)}
+      : {c:"bad",t:formatExtraTime(extra)}
+}
 function tick(){clock.textContent=new Date().toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"})}setInterval(tick,1000);tick();
 function render(){currentRoutes=loadRoutes().filter(r=>r.start&&r.target).slice(0,4);if(!currentRoutes.length)currentRoutes=DEFAULT;grid.className=`grid count${currentRoutes.length}`;grid.innerHTML="";mapObjs=[];currentRoutes.forEach((r,i)=>{let el=document.createElement("article");el.className="card loading"+(i===0?" showMap":"");el.id=`card-${i}`;el.innerHTML=`<div class="cardInner"><div class="routeName">${esc(r.name||`${r.start} → ${r.target}`)}</div><div class="rule"></div><div class="places"><div class="ico">○</div><div class="addr">${esc(clean(r.start))}</div><div class="dots">••••</div><div></div><div class="ico">⌖</div><div class="addr">${esc(clean(r.target))}</div></div><div class="timeRow"><div class="num" id="num-${i}">…</div><div class="unit" id="unit-${i}">min</div></div><div class="normal" id="normal-${i}">Normal: –</div><div class="badge" id="badge-${i}">Lädt</div></div><div class="mapBox"><div class="mapLabel" id="mapLabel-${i}">ROUTE + VERKEHR</div><div class="map" id="map-${i}"></div></div>`;grid.appendChild(el)});updated.textContent="Lade Fahrzeiten …"}
 function loadGoogle(){let k=loadKey();if(!k){updated.textContent="API-Key fehlt · ⚙︎ öffnen";return} if(mapsReady){refreshAll();return} if(mapsLoading)return;mapsLoading=true;let old=document.getElementById("gmaps");if(old)old.remove();let s=document.createElement("script");s.id="gmaps";s.async=true;s.defer=true;s.src=`https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(k)}&callback=initMaps`;s.onerror=()=>updated.textContent="Google Maps konnte nicht geladen werden";document.head.appendChild(s)}
